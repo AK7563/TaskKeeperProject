@@ -7,6 +7,9 @@ class MyController extends GetxController{
   var margin = EdgeInsets.fromLTRB(50000, 5, 5, 0).obs;
   var title = "Home".obs;
   var searchParam = "".obs;
+  var isFinished = true.obs;
+  var filterValue = "Finished".obs;
+
   Rx<List<taskBody>> datas = Rx<List<taskBody>>([
     taskBody(
       name: "Harry Potter",
@@ -94,7 +97,7 @@ class MyController extends GetxController{
   List<taskBody> getSearch(String text){
     Rx<List<taskBody>> temp = Rx<List<taskBody>>([]);
     for(int i = 0; i < datas.value.length; i++){
-      if(datas.value[i].name.contains(text)){
+      if(datas.value[i].name.toLowerCase().contains(text.toLowerCase())){
         temp.value.add(datas.value[i]);
       }
     }
@@ -117,10 +120,6 @@ class MyController extends GetxController{
         margin = EdgeInsets.fromLTRB(10, 5, 5, 0).obs;
         break;
       case(3):
-        title = "Finished".obs;
-        margin = EdgeInsets.fromLTRB(width, 5, 5, 0).obs;
-        break;
-      case(4):
         title = "Profile".obs;
         margin = EdgeInsets.fromLTRB(width, 5, 5, 0).obs;
         break;
