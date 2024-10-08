@@ -5,17 +5,25 @@ import 'package:getxproject/controllers/taskBody.dart';
 import 'package:getxproject/widgets/progressBar.dart';
 
 class Homepage extends StatelessWidget {
-  Homepage({this.isFinished = false, this.isHome = true, this.isSearch = false});
-  Homepage.task({required this.isFinished, this.isHome = false, required this.fullData, this.isSearch = false});
-  Homepage.search({this.isFinished = false, this.isHome = false, this.isSearch = true});
+  Homepage({this.isFinished = false, this.isHome = true, this.isSearch = false}){
+    controller.loadTasks();
+  }
+  Homepage.task({required this.isFinished, this.isHome = false, this.isSearch = false}){
+    controller.loadTasks();
+  }
+  Homepage.search({this.isFinished = false, this.isHome = false, this.isSearch = true}){
+    controller.loadTasks();
+  }
 
   final bool isFinished;
   final bool isHome;
   final bool isSearch;
   final MyController controller = Get.find();
-  List<taskBody> get data {
+  List<taskBody> get data => loadDB();
+
+  List<taskBody> loadDB() {
     if(isHome){
-      return controller.datas.value;
+      return controller.datas;
     }
     if(isFinished){
       return controller.completed;
@@ -25,7 +33,6 @@ class Homepage extends StatelessWidget {
     }
     return controller.uncompleted;
   }
-  late List<taskBody> fullData = fullData ?? data;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +48,7 @@ class Homepage extends StatelessWidget {
                   children: [
                     Card(
                       child: ListTile(
-                        leading: (data[index].icon),
+                        leading: (Icon(Icons.auto_stories)),
                         title: Text(data[index].name.toString()),
                         titleTextStyle: const TextStyle(
                             fontSize: 16,

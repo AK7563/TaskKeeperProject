@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getxproject/controllers/controller.dart';
-import 'package:getxproject/controllers/taskBody.dart';
 import 'package:getxproject/widgets/progressBar.dart';
 
 class TaskPage extends StatefulWidget {
@@ -16,7 +15,7 @@ class _TaskPageState extends State<TaskPage> {
   int getIndex(String task, int length){
     int index = 0;
     for(int i = 0; i < length; i ++){
-      if(controller.datas.value[i].name == task){
+      if(controller.datas[i].name == task){
         return index;
       }
       index ++;
@@ -26,11 +25,11 @@ class _TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    int index = getIndex(Get.arguments['task'], controller.datas.value.length);
+    int index = getIndex(Get.arguments['task'], controller.datas.length);
     return Obx((){
       return Scaffold(
         appBar: AppBar(
-          title: Text(controller.datas.value[index].name),
+          title: Text(controller.datas[index].name),
           titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
           backgroundColor: Colors.blue,
         ),
@@ -44,7 +43,7 @@ class _TaskPageState extends State<TaskPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: RichText(text: TextSpan(
-                          text: controller.datas.value[index].name,
+                          text: controller.datas[index].name,
                           style: const TextStyle(color: Colors.lightBlueAccent,
                               fontSize: 24,
                               fontWeight:
@@ -52,7 +51,7 @@ class _TaskPageState extends State<TaskPage> {
                           )
                       )),
                     ),
-                    ProgressBar(count: controller.datas.value[index].tempProgress, len: controller.datas.value[index].chapters, high: true,),
+                    ProgressBar(count: controller.datas[index].tempProgress, len: controller.datas[index].chapters, high: true,),
                     Container(
                       margin: EdgeInsets.all(10),
                       child: Row(
