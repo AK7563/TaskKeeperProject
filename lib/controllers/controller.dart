@@ -16,13 +16,10 @@ class MyController extends GetxController{
 
   static Database? _db;
 
-  // list data yang digunakan untuk menampun hasil database, .obs diguanakan di UI
   var datas = <taskBody>[].obs;
 
   Future<Database?> get db async {
-    if (_db == null) {
-      _db = await initDB();
-    }
+    _db ??= await initDB();
     return _db;
   }
 
@@ -53,79 +50,29 @@ class MyController extends GetxController{
   // Insert Task
   Future<int> addTask(taskBody task) async {
     print('adding task');
+    datas.add(task);
     var dbClient = await db;
     int result = await dbClient!.insert('tasks', task.toMap());
     loadTasks();
     return result;
   }
+  
+  // Remove Task
+  Future<int> removeTask(taskBody task) async {
+    print('removing task');
+    datas.remove(task);
+    var dbClient = await db;
+    int result = await dbClient!.delete('tasks', where: 'id = ${task.id}');
+    loadTasks();
+    return result;
+  }
 
-  // Retrieve Tasks
+  // Load Tasks
   Future<void> loadTasks() async {
     print('loading task');
     var dbClient = await db;
     List<Map<String, dynamic>> queryResult = await dbClient!.query('tasks');
     datas.assignAll(queryResult.map((data) => taskBody.fromMap(data)).toList());
-    if(datas.length == 0){
-      datas.addAll({
-        taskBody(
-          id: 1,
-          name: "Harry Potter",
-          chapters: 198,
-          tempProgress: 98,
-          progress: "On The Way",
-          description: "Harry Potter",
-          addedDate: "9/23/2024",
-        ),
-        taskBody(
-          id: 2,
-          name: "School Math Book",
-          chapters: 38,
-          tempProgress: 36,
-          progress: "Near Done",
-          description: "Algebra",
-          addedDate: "9/23/2024",
-        ),
-        taskBody(
-          id: 3,
-          name: "School History Book",
-          chapters: 10,
-          tempProgress: 0,
-          progress: "Not Started",
-          description: "Bad, just bad",
-          addedDate: "9/23/2024",
-        ),
-        taskBody(
-          id: 4,
-          name: "School Physics Book",
-          chapters: 40,
-          tempProgress: 40,
-          progress: "Near Done",
-          description: "Aerospace 101",
-          addedDate: "9/23/2024",
-        ),
-        taskBody(
-          id: 5,
-          name: "School Biology Book",
-          chapters: 20,
-          tempProgress: 20,
-          progress: "Done",
-          description: "Microbiology pt.1",
-          addedDate: "9/23/2024",
-        ),
-        taskBody(
-          id: 6,
-          name: "School Chemist Book",
-          chapters: 35,
-          tempProgress: 32,
-          progress: "Done",
-          description: "How to Meth :3",
-          addedDate: "9/23/2024",
-        ),
-      });
-      for(int i = 0; i < datas.length; i++){
-        addTask(datas[i]);
-      }
-    }
   }
 
   Future<int> updateTask(taskBody task) async {

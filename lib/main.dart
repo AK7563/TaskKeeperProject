@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:getxproject/controllers/taskBody.dart';
 import 'package:getxproject/pages/HomePage.dart';
 import 'package:getxproject/controllers/controller.dart';
 import 'package:getxproject/pages/ProfilePage.dart';
 import 'package:getxproject/pages/SplashScreen.dart';
+import 'package:getxproject/pages/qrPage.dart';
 import 'package:getxproject/pages/tasks.dart';
+import 'package:getxproject/widgets/container.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,11 +28,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      initialRoute: "/home",
+      initialRoute: "/splash",
       getPages: [
         GetPage(name: "/splash", page: ()=> const LoginPage()),
         GetPage(name: "/home", page: () => MainPage()),
         GetPage(name: "/tasks", page: () => const TaskPage()),
+        GetPage(name: "/qr", page: () => const QRpage()),
       ],
     );
   }
@@ -37,14 +41,22 @@ class MyApp extends StatelessWidget {
 
 class MainPage extends StatelessWidget {
   final MyController controller = Get.find();
-  List<String> list = <String>['Finished', 'Unfinished'];
-  PageController pageController = PageController(initialPage: 0);
+  final List<String> list = <String>['Finished', 'Unfinished'];
+  final PageController pageController = PageController(initialPage: 0);
+  final titleAdd = TextEditingController();
+  final chaptersAdd = TextEditingController();
+  final progressAdd = TextEditingController();
+  final descriptionAdd = TextEditingController();
+
+  MainPage({super.key});
+  DateTime get date => DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     controller.changeTab(0, MediaQuery.sizeOf(context).width);
     return Center(
       child: Obx(() => Scaffold(
+
         appBar: AppBar(
           titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
           backgroundColor: Colors.blue,
@@ -70,18 +82,22 @@ class MainPage extends StatelessWidget {
             ],
           ),
         ),
+
         body: PageView(
           controller: pageController,
-          onPageChanged: (newPage) => controller.changeTab(newPage, MediaQuery.sizeOf(context).width),
+          onPageChanged: (newPage){
+            controller.changeTab(newPage, MediaQuery.sizeOf(context).width);
+          },
           children: [
             Homepage(),
             Homepage.search(),
             Homepage.task(
               isFinished: controller.isFinished.value
             ),
-            Profilepage()
+            ProfilePage()
           ],
         ),
+
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: controller.index.value,
           backgroundColor: Colors.blue,
@@ -104,8 +120,131 @@ class MainPage extends StatelessWidget {
               icon: Icon(Icons.person, color: Colors.black),
               label: 'Profile'),
           ],
-        )),
-      ),
+        ),
+
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.blue,
+          onPressed: (){
+            showDialog(
+              context: context,
+              builder: (context)=>AlertDialog(
+                title: const Text('Add To List'),
+                content: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('Title', style: TextStyle(fontSize: 20))
+                      ),
+                      myContainer(child: TextField(
+                        controller: titleAdd,
+                        maxLines: 1,
+                        style: const TextStyle(fontSize: 15),
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          hintText: 'Title',
+                        ),
+                      )),
+
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Total Chapters', style: TextStyle(fontSize: 20))
+                        ),
+                      ),
+                      myContainer(child: TextField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                        controller: chaptersAdd,
+                        maxLines: 1,
+                        style: const TextStyle(fontSize: 15),
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          hintText: 'Total Chapters',
+                        ),
+                      )),
+
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Progress', style: TextStyle(fontSize: 20))
+                        ),
+                      ),
+                      myContainer(child: TextField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                        controller: progressAdd,
+                        maxLines: 1,
+                        style: const TextStyle(fontSize: 15),
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          hintText: 'Progress',
+                        ),
+                      )),
+
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Description', style: TextStyle(fontSize: 20))
+                        ),
+                      ),
+                      myContainer(child: TextField(
+                        controller: descriptionAdd,
+                        style: const TextStyle(fontSize: 15),
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          hintText: 'Description',
+                        ),
+                      )),
+                    ],
+                  ),
+                ),
+
+                actions: [
+                  TextButton(
+                    onPressed: (){
+                      titleAdd.clear();
+                      chaptersAdd.clear();
+                      progressAdd.clear();
+                      descriptionAdd.clear();
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel')
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      taskBody task = taskBody(
+                        id: controller.datas.length + 1,
+                        name: titleAdd.text,
+                        chapters: int.parse(chaptersAdd.text),
+                        tempProgress: int.parse(progressAdd.text),
+                        progress: 'On going',
+                        description: descriptionAdd.text,
+                        addedDate: '${date.day}/${date.month}/${date.year}'
+                      );
+                      controller.addTask(task);
+                      titleAdd.clear();
+                      chaptersAdd.clear();
+                      progressAdd.clear();
+                      descriptionAdd.clear();
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Add')
+                  )
+                ],
+              )
+            );
+          },
+          child: const Icon(Icons.add, color: Colors.white),
+        ),
+      )),
     );
   }
   void changePage(int index, BuildContext context){
@@ -136,7 +275,7 @@ class MainPage extends StatelessWidget {
         items: list.map<DropdownMenuItem<String>>((String value) => DropdownMenuItem(value: value, child: Text(value))).toList(),
         underline: Container(
           height: 0,
-          color: Color(0x00000000),
+          color: const Color(0x00000000),
         ),
         onChanged: (String? value) {
           if (value == "Finished") {

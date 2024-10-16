@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getxproject/controllers/controller.dart';
+import 'package:getxproject/widgets/container.dart';
 import 'package:getxproject/widgets/progressBar.dart';
 
 class TaskPage extends StatefulWidget {
@@ -79,31 +80,8 @@ class _TaskPageState extends State<TaskPage> {
                 )
               ),
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    gradient: const LinearGradient(
-                      begin: Alignment(0, -1),
-                      end: Alignment(0, 0),
-                      colors: <Color>[
-                        Color.fromRGBO(185, 235, 255, 1.0),
-                        Color.fromRGBO(145, 224, 255, 1.0),
-                        Color.fromRGBO(85, 206, 255, 1.0),
-                        Color.fromRGBO(85, 206, 255, 1.0),
-                        Color.fromRGBO(85, 206, 255, 1.0),
-                        Color.fromRGBO(85, 206, 255, 1.0),
-                        Color.fromRGBO(85, 206, 255, 1.0),
-                        Colors.lightBlueAccent,
-                      ]
-                    )
-                  ),
-                  child: Container(
-                    margin: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Color(0xFFE6E6E6)
-                    ),
-                  ),
+                child: myContainer(
+                  child: Text(controller.datas[index].description)
                 ),
               ),
             ],

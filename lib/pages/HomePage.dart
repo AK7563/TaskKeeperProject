@@ -3,15 +3,16 @@ import 'package:get/get.dart';
 import 'package:getxproject/controllers/controller.dart';
 import 'package:getxproject/controllers/taskBody.dart';
 import 'package:getxproject/widgets/progressBar.dart';
+import 'package:getxproject/widgets/tile.dart';
 
 class Homepage extends StatelessWidget {
-  Homepage({this.isFinished = false, this.isHome = true, this.isSearch = false}){
+  Homepage({super.key, this.isFinished = false, this.isHome = true, this.isSearch = false}){
     controller.loadTasks();
   }
-  Homepage.task({required this.isFinished, this.isHome = false, this.isSearch = false}){
+  Homepage.task({super.key, required this.isFinished, this.isHome = false, this.isSearch = false}){
     controller.loadTasks();
   }
-  Homepage.search({this.isFinished = false, this.isHome = false, this.isSearch = true}){
+  Homepage.search({super.key, this.isFinished = false, this.isHome = false, this.isSearch = true}){
     controller.loadTasks();
   }
 
@@ -47,17 +48,16 @@ class Homepage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Card(
-                      child: ListTile(
-                        leading: (Icon(Icons.auto_stories)),
-                        title: Text(data[index].name.toString()),
-                        titleTextStyle: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.lightBlueAccent,
-                            fontWeight: FontWeight.w600),
-                        subtitle: Text("Added: ${data[index].addedDate}"),
-                        dense: true,
-                        onTap: () {
+                      child: myTile(
+                        index: index,
+                        name: data[index].name.toString(),
+                        addedDate: data[index].addedDate,
+                        onTap: (){
                           Get.toNamed("/tasks", arguments:  {'task' : data[index].name.toString()});
+                        },
+                        onRemove: (){
+                          controller.removeTask(controller.datas[index]);
+                          Navigator.pop(context);
                         },
                       ),
                     ),
