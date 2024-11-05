@@ -95,7 +95,7 @@ class MainPage extends StatelessWidget {
               DrawerHeader(
                 padding: const EdgeInsets.all(0.0),
                 decoration: BoxDecoration(
-                    bordeconst rRadius: const BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                         topLeft: Radius.zero,
                         topRight: Radius.zero,
                         bottomLeft: Radius.circular(20),
@@ -129,29 +129,29 @@ class MainPage extends StatelessWidget {
                 leading: const Icon(Icons.home, color: Colors.black),
                 title: const Text('Home'),
                 onTap: (){
-       const            changePage(0, context);
+                  changePage(0, context);
                 },
-         const      ),
+              ),
               ListTile(
                 leading: const Icon(Icons.search, color: Colors.black),
                 title: const Text('Search'),
-                onTap: ()const {
+                onTap: (){
                   changePage(1, context);
                 },
-  const             ),
+              ),
               ListTile(
                 leading: const Icon(Icons.filter_alt, color: Colors.black),
                 title: const Text('Filter'),
-                const onTap: (){
+                onTap: (){
                   changePage(2, context);
-                const },
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.person, color: Colors.black),
                 title: const Text('Profile'),
-              const   onTap: (){
+                onTap: (){
                   changePage(3, context);
-          const       },
+                },
               )
             ],
           ),
