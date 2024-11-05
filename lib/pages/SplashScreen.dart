@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getxproject/controllers/controller.dart';
 import 'package:getxproject/widgets/container.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,9 +13,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final email = TextEditingController();
   final password = TextEditingController();
+  final MyController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    controller.textSize = (15.0 * MediaQuery.sizeOf(context).height/600).obs;
+    double textSize = controller.textSize.value;
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -24,23 +28,23 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(Icons.auto_stories, color: Colors.black, size: MediaQuery.sizeOf(context).width / 5,),
-              const Text("Welcome To E-Lib", style: TextStyle(fontSize: 30),),
-              Container(
+              Text("Welcome To E-Lib", style: TextStyle(fontSize: textSize*2),),
+              SizedBox(
                 width: MediaQuery.sizeOf(context).width - 100,
-                child: const Text("The application to help you keep up with your tasks", textAlign: TextAlign.center),
+                child: Text("The application to help you keep up with your tasks", textAlign: TextAlign.center, style: TextStyle(fontSize: textSize/1.2)),
               ),
 
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: const Align(
+                child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Insert Email', style: TextStyle(fontSize: 20))
+                    child: Text('Insert Email', style: TextStyle(fontSize: textSize))
                 ),
               ),
               myContainer(child: TextField(
                 controller: email,
                 maxLines: 1,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: textSize),
                 decoration: const InputDecoration(
                   isDense: true,
                   border: InputBorder.none,
@@ -50,9 +54,9 @@ class _LoginPageState extends State<LoginPage> {
 
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: const Align(
+                child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Insert Password', style: TextStyle(fontSize: 20))
+                    child: Text('Insert Password', style: TextStyle(fontSize: textSize))
                 ),
               ),
               myContainer(child: TextField(
@@ -61,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                 autocorrect: false,
                 controller: password,
                 maxLines: 1,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: textSize),
                 decoration: const InputDecoration(
                   isDense: true,
                   border: InputBorder.none,
@@ -73,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
                   children: [
                     Expanded(child: Container()),
-                    const Text('Log In', style: TextStyle(color: Colors.white, fontSize: 30)),
+                    Text('Log In', style: TextStyle(color: Colors.white, fontSize: textSize*1.5)),
                     Expanded(child: Container())
                   ],
                 ),
@@ -96,7 +100,6 @@ class _LoginPageState extends State<LoginPage> {
                     password.clear();
                     return;
                   }
-                  print('aaaaaa');
                   Get.toNamed('/home');
                 }
               )

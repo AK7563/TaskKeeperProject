@@ -6,18 +6,22 @@ import 'package:path/path.dart';
 
 class MyController extends GetxController{
   var index = 0.obs;
-  var margin = EdgeInsets.fromLTRB(50000, 5, 5, 0).obs;
+  var textSize = (15.0 * 600/700).obs;
+  var margin = const EdgeInsets.fromLTRB(50000, 5, 5, 0).obs;
   var title = "Home".obs;
   var searchParam = "".obs;
   var isFinished = true.obs;
   var filterValue = "Finished".obs;
   var imagePath = "https://i1.sndcdn.com/avatars-j3SRoUzaLbJxPNDz-38FaEg-t500x500.jpg".obs;
   var backgroundPath = "https://i1.sndcdn.com/visuals-001422203943-o29q4e-t2480x520.jpg".obs;
+  var screenSize = 0.0.obs;
 
   static Database? _db;
 
   var datas = <taskBody>[].obs;
 
+  //DATABASE STUFF
+  //region databases
   Future<Database?> get db async {
     _db ??= await initDB();
     return _db;
@@ -86,9 +90,11 @@ class MyController extends GetxController{
     loadTasks();
     return result;
   }
+  //endregion
 
 
-
+  //DATA INITIALISATION
+  //region data innit
   List<taskBody> get completed => getCompleted();
 
   List<taskBody> get uncompleted => getUncompleted();
@@ -129,7 +135,7 @@ class MyController extends GetxController{
     }
     return temp.value;
   }
-
+  //endregion
 
 
   void changeTab(int index, double width) {
@@ -141,11 +147,11 @@ class MyController extends GetxController{
         break;
       case(1):
         title = "Search".obs;
-        margin = EdgeInsets.fromLTRB(10, 5, 5, 0).obs;
+        margin = const EdgeInsets.fromLTRB(10, 5, 5, 0).obs;
         break;
       case(2):
         title = "Filter".obs;
-        margin = EdgeInsets.fromLTRB(10, 5, 5, 0).obs;
+        margin = const EdgeInsets.fromLTRB(10, 5, 5, 0).obs;
         break;
       case(3):
         title = "Profile".obs;
@@ -177,4 +183,11 @@ class MyController extends GetxController{
   void changeSearch(String text){
     searchParam.value = text;
   }
+
+
+  void updateScreenWidth(double width){
+    screenSize.value = width;
+  }
+  bool get isMobile => screenSize.value < 600;
+  bool get isTablet => screenSize.value >= 600 && screenSize.value > 1200;
 }

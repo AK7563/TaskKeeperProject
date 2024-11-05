@@ -9,6 +9,8 @@ class ProfilePage extends StatelessWidget {
   final MyController controller = Get.find();
   @override
   Widget build(BuildContext context) {
+    double iconSize = MediaQuery.sizeOf(context).height / 30;
+    double textSize = controller.textSize.value;
     return Scaffold(
       body: Center(
           child: Column(
@@ -23,7 +25,7 @@ class ProfilePage extends StatelessWidget {
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20)
                   ),
-                  image: DecorationImage(image: NetworkImage(controller.backgroundPath.value.toString()), fit: BoxFit.fitHeight)
+                  image: DecorationImage(image: NetworkImage(controller.backgroundPath.value.toString()), fit: BoxFit.cover)
                 ),
                 child: Column(
                   children: [
@@ -55,52 +57,61 @@ class ProfilePage extends StatelessWidget {
                         Expanded(
                           child: Row(
                             children: [
-                              const Expanded(
-                                child: myContainer.button(
-                                  child: Icon(Icons.settings, color: Colors.white),
-                                  function: null,
-                                  margin: EdgeInsets.all(5)
+                              Expanded(
+                                child: SizedBox(
+                                  height: MediaQuery.sizeOf(context).height,
+                                  child: myContainer.button(
+                                    function: null,
+                                    margin: const EdgeInsets.all(5),
+                                    child: Icon(Icons.settings, color: Colors.white, size: iconSize)
+                                  ),
                                 ),
                               ),
                               Expanded(
-                                child: myContainer.button(
-                                    child: const Icon(Icons.qr_code, color: Colors.white),
-                                    function: (){
-                                      Get.toNamed("/qr");
-                                    },
-                                    margin: const EdgeInsets.all(5)
+                                child: SizedBox(
+                                  height: MediaQuery.sizeOf(context).height,
+                                  child: myContainer.button(
+                                      function: (){
+                                        Get.toNamed("/qr");
+                                      },
+                                      margin: const EdgeInsets.all(5),
+                                      child: Icon(Icons.qr_code, color: Colors.white, size: iconSize)
+                                  ),
                                 ),
                               ),
-                              const Expanded(
-                                child: myContainer.button(
-                                    child: Icon(Icons.notifications, color: Colors.white),
-                                    function: null,
-                                    margin: EdgeInsets.all(5)
+                              Expanded(
+                                child: SizedBox(
+                                  height: MediaQuery.sizeOf(context).height,
+                                  child: myContainer.button(
+                                      function: null,
+                                      margin: const EdgeInsets.all(5),
+                                      child: Icon(Icons.notifications, color: Colors.white, size: iconSize)
+                                  ),
                                 ),
                               ),
                             ],
                           )
                         ),
-                        const ListTile(
-                          leading: Icon(Icons.settings),
-                          title: Text('Profile Settings'),
-                        ),
-                        const ListTile(
-                          leading: Icon(Icons.notifications),
-                          title: Text('Notifications'),
-                        ),
-                        const ListTile(
-                          leading: Icon(Icons.qr_code),
-                          title: Text('Your QR Code'),
+                        ListTile(
+                          leading: Icon(Icons.settings, size: iconSize),
+                          title: Text('Profile Settings', style: TextStyle(fontSize: textSize)),
                         ),
                         ListTile(
-                          leading: const Icon(Icons.check),
-                          title: const Text('Completed Books: '),
+                          leading: Icon(Icons.notifications, size: iconSize),
+                          title: Text('Notifications', style: TextStyle(fontSize: textSize)),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.qr_code, size: iconSize),
+                          title: Text('Your QR Code', style: TextStyle(fontSize: textSize)),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.check, size: iconSize),
+                          title: Text('Completed Books: ', style: TextStyle(fontSize: textSize)),
                           trailing: Text(controller.completed.length.toString(), textAlign: TextAlign.end, style: const TextStyle(color: Colors.blue, fontSize: 20)),
                         ),
                         ListTile(
-                          leading: const Icon(Icons.close),
-                          title: const Text('Uncompleted Books: '),
+                          leading: Icon(Icons.close, size: iconSize),
+                          title: Text('Uncompleted Books: ', style: TextStyle(fontSize: textSize)),
                           trailing: Text(controller.uncompleted.length.toString(), textAlign: TextAlign.end, style: const TextStyle(color: Colors.blue, fontSize: 20)),
                         ),
                       ],

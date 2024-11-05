@@ -19,7 +19,7 @@ class myTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: (Icon(Icons.auto_stories)),
+      leading: (const Icon(Icons.auto_stories)),
       title: Text(name),
       titleTextStyle: const TextStyle(
           fontSize: 16,
@@ -33,24 +33,24 @@ class myTile extends StatelessWidget {
                 context: context,
                 builder: (context)=>
                     AlertDialog(
-                      title: Text('Are You Sure?'),
-                      content: Text('Removing your task will remove its progress forever'),
+                      title: const Text('Are You Sure?'),
+                      content: const Text('Removing your task will remove its progress forever'),
                       actions: [
                         TextButton(
                             onPressed: (){
                               Navigator.pop(context);
                             },
-                            child: Text('Cancel')
+                            child: const Text('Cancel')
                         ),
                         TextButton(
                             onPressed: onRemove,
-                            child: Text('Remove')
+                            child: const Text('Remove')
                         )
                       ],
                     )
             );
           },
-          icon: Icon(Icons.remove)
+          icon: const Icon(Icons.remove)
       ),
       onTap: onTap,
     );
